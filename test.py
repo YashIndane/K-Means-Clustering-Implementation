@@ -1,58 +1,71 @@
 import math
 import matplotlib.pyplot as plt
 
-#centroid = (3.4 , 3.6)
-points = [(3 , 9) , (4,4) , (3 , 11) , (10.5 , 11) ,  (6, 7.8) , (2,5) , (19 , 6) , (8 , 5.8), (16 , 4.4) , (21 , 7.2) , (17 , 8) , (20 , 5.2) , (9,11)]
+points =  [(1,3) , (2.3 , 3) , (1.5 , 4.2) , (2.6 , 3.9) , (3,3) , (4,2) , (1.4 , 1.4) , (2,2) , (3.5 , 4),
+           (7 , 12) , (7,18) , (8.4 , 12.44) , (7.7 , 10) , (10 , 9.4) , (8.8  ,8.8) , (9.2 , 14) , (10,9.8),
+           (24.6 , 4) , (25 , 5) , (24.9 , 2.39) , (27,4) , (26.66 , 4.01) , (27,5) , (23.59 , 3.3) , (26.02 , 5.08)]
 
-centroid_A = (sum([x[0] for x in points])/len(points) , sum([x[1] for x in points]) / len(points))
-centroid_B = (centroid_A[0] + 1 , centroid_A[1] + 1)
+K = 3 #No. of clusters
+X , Y = sum([x[0] for x in points])/len(points) , sum([y[1] for y in points])/len(points)
+centroid_array , clusters_array = [] , []
 
-#trying to make two clusters
-A , B = [] , []
+for i in range(K) : 
+    centroid_array.append([X + i + 2, Y + i])
+    clusters_array.append([])
 
-def calculateCentroid() :
-    
-    global centroid_A , centroid_B 
+def updateCentroid() : 
+     
+     global centroid_array
+     for idx in range(len(centroid_array)) : 
+        
+          try : 
+             centroid_array[idx] = [sum([x_[0] for x_ in clusters_array[idx]])/len(clusters_array[idx]) , 
+                                   sum([y_[1] for y_ in clusters_array[idx]])/len(clusters_array[idx])]
+          except : pass 
 
-    centroid_A = (sum([x[0] for x in A]) / len(A) , sum([x[1] for x in A]) / len(A))
-    centroid_B = (sum([x[0] for x in B]) / len(B) , sum([x[1] for x in B]) / len(B))
+def updateClusters() : 
 
+    global clusters_array
 
-#initial group forming
-for p in points : 
-
-    if math.dist(centroid_A , p) >= math.dist(centroid_B , p) : B.append(p)
-    else : A.append(p)
-
-calculateCentroid()
-
-last_Bx = [(-1000,-1000)]
-
-for x in range(len(points) * 2):
-    
     for p in points : 
 
-         if math.dist(centroid_A , p) >= math.dist(centroid_B , p) : B.append(p)
-         else : A.append(p)
-    if B == last_Bx :
-         print('Clusters are : ')
-         break
-    last_Bx = B
-   
-    calculateCentroid()
-    A , B = [] , []
+        temp = []
+        for c in centroid_array : temp.append(math.dist(c , p))
+        clusters_array[temp.index(min(temp))].append(p)
 
-print(A)
-print(B)
+updateClusters()
+updateCentroid()
 
+last_array = []
 
-plt.scatter([x[0] for x in points] , [y[1] for y in points])
+for i in range(K) : clusters_array[i] = [] 
+
+for w in range(len(points) * 2) : 
+
+      print(centroid_array)
+
+      updateClusters()
+      
+      if last_array == clusters_array :
+
+           print('Clusters are : ')
+           for c_ in clusters_array : print(c_)
+           print(w)
+           break
+
+      last_array = clusters_array
+      updateCentroid()
+      clusters_array = []
+      for i_ in range(K) : clusters_array.append([]) 
+
+colors = ['green' , 'red' , 'purple' , 'black' , 'yellow']
+for v , cl in enumerate(clusters_array) : 
+    plt.scatter([n[0] for n in cl] , [n[1] for n in cl] , c = colors[v])
+
 plt.show()
 
+           
 
-plt.scatter([x[0] for x in A] , [y[1] for y in A] , c = 'red')
-plt.scatter([x[0] for x in B] , [y[1] for y in B] , c = 'green')
-plt.show()
 
 
 
