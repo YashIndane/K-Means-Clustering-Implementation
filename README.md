@@ -7,4 +7,4 @@ Now we group the points to the randomly points according to the random point whi
 Now we calculate the new centroids of the clusters. Now according to the new centroids we make new clusters based on the same idea as we used before of nearest distance.
 After this we calculate the new centroids and repeat the making of clusters and centroids , till when none of the clusters receives a new point. At this point the clusters are ready. 
 
-![elbow_point.png]
+![](elbow_point.png)
