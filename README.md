@@ -8,3 +8,7 @@ Now we calculate the new centroids of the clusters. Now according to the new cen
 After this we calculate the new centroids and repeat the making of clusters and centroids , till when none of the clusters receives a new point. At this point the clusters are ready. 
 
 ![](elbow_point.png)
+
+Elbow point is the point after which there is more sharp decrease in error . So this point is the optimal number of clusters.
+
+![](cluster_plot.png)
